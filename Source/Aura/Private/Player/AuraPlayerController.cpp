@@ -6,6 +6,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
+#include "Interaction/EnemyInterface.h"
+
 
 
 AAuraPlayerController::AAuraPlayerController()
@@ -61,4 +63,68 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControlledPawn->AddMovementInput(RightDirecton, InputAxisVector.X);
 	}
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+	FHitResult hitResult;
+	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, hitResult);
+
+	if (!hitResult.bBlockingHit) return;
+
+	LastActor = CurrentActor;
+	CurrentActor = Cast<IEnemyInterface>(hitResult.GetActor());
+
+
+	// last와 current 가 둘다 null인 경우 -> 아무것도 안함
+
+	// last가 null,  current 가 null이 아닌 경우 -> current hilight
+
+	// last가 null이 아닌 경우,  current 가 null인 경우 -> unhilight last
+
+	// last와 current 가 둘다 null이 아닌 경우
+	//		last 와 current가 같은 경우 -> 현재 유지
+	
+	//		last 와 current가 다른 경우 -> last unhilight current highlight
+
+	if (LastActor == nullptr)
+	{
+		if (CurrentActor == nullptr)
+		{
+			// Do nothing
+		}
+		else
+		{
+			// current highlight
+			CurrentActor->HighlightActor();
+		}
+	}
+	else
+	{
+		if (CurrentActor == nullptr)
+		{
+			// unhighlight last
+			LastActor->UnHighlightActor();
+		}
+		else
+		{
+			if (CurrentActor == LastActor)
+			{
+				CurrentActor->HighlightActor();
+			}
+			else
+			{
+				LastActor->UnHighlightActor();
+				CurrentActor->HighlightActor();
+			}
+		}
+	}
+
 }
