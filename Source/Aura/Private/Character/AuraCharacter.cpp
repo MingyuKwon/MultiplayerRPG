@@ -2,9 +2,12 @@
 
 
 #include "Character/AuraCharacter.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AbilitySystemComponent.h"
+#include "Player/AuraPlayerState.h"
 
 AAuraCharacter::AAuraCharacter()
 {
@@ -27,4 +30,31 @@ AAuraCharacter::AAuraCharacter()
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
 
+}
+
+void AAuraCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// InitAbility actor info for the Server
+	InitAbilityActorInfo();
+}
+
+void AAuraCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	// InitAbility actor info for the Client
+	InitAbilityActorInfo();
+}
+
+void AAuraCharacter::InitAbilityActorInfo()
+{
+	AAuraPlayerState* auraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(auraPlayerState);
+
+	AbilitySystemComponent = auraPlayerState->GetAbilitySystemComponent();
+	AttributeSet = auraPlayerState->GetAttributeSet();
+
+	AbilitySystemComponent->InitAbilityActorInfo(auraPlayerState, this);
 }

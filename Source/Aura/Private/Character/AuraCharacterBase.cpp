@@ -18,6 +18,11 @@ void AAuraCharacterBase::BeginPlay()
 	
 }
 
+UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
 void AAuraCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
