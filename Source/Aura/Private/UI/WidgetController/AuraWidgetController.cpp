@@ -11,3 +11,8 @@ void UAuraWidgetController::SetWIdgetControllerParams(const FAuraWidgetControlle
 	AttributeSet = AuraWidgetControllerParas.AttributeSet;
 
 }
+
+void UAuraWidgetController::BroadcastInitialValues()
+{
+
+}

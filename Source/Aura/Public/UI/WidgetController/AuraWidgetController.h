@@ -37,7 +37,7 @@ struct FAuraWidgetControllerParas
 };
 
 
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class AURA_API UAuraWidgetController : public UObject
 {
 	GENERATED_BODY()
@@ -45,6 +45,7 @@ class AURA_API UAuraWidgetController : public UObject
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetWIdgetControllerParams(const FAuraWidgetControllerParas& AuraWidgetControllerParas);
+	virtual void BroadcastInitialValues();
 
 protected:
 
