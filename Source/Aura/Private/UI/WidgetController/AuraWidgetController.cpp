@@ -3,3 +3,11 @@
 
 #include "UI/WidgetController/AuraWidgetController.h"
 
+void UAuraWidgetController::SetWIdgetControllerParams(const FAuraWidgetControllerParas& AuraWidgetControllerParas)
+{
+	PlayerController = AuraWidgetControllerParas.PlayerController;
+	PlayerState = AuraWidgetControllerParas.PlayerState;
+	AbilitySystemComponent = AuraWidgetControllerParas.AbilitySystemComponent;
+	AttributeSet = AuraWidgetControllerParas.AttributeSet;
+
+}

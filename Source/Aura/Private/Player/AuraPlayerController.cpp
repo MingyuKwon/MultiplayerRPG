@@ -23,8 +23,10 @@ void AAuraPlayerController::BeginPlay()
 	//SubSystem는 싱글톤이어서 딱 하나만 존재한다
 	UEnhancedInputLocalPlayerSubsystem* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	check(SubSystem);
-
-	SubSystem->AddMappingContext(AuraContext, 0);
+	if (SubSystem != nullptr)
+	{
+		SubSystem->AddMappingContext(AuraContext, 0);
+	}
 
 	// 게임 중에 마우스 커서 보이도록 하고, 기본 마우스 커서 모양으로 정함
 	bShowMouseCursor = true;

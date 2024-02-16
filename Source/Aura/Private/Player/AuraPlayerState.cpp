@@ -15,6 +15,8 @@ AAuraPlayerState::AAuraPlayerState()
 	// 플레이어에 의해 조정 될 것이니 Mixed
 
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(FName(TEXT("AttributeSet")));
+
+	
 }
 
 UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
