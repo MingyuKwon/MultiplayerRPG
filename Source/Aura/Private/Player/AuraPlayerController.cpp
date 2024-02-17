@@ -22,7 +22,6 @@ void AAuraPlayerController::BeginPlay()
 
 	//SubSystem는 싱글톤이어서 딱 하나만 존재한다
 	UEnhancedInputLocalPlayerSubsystem* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	check(SubSystem);
 	if (SubSystem != nullptr)
 	{
 		SubSystem->AddMappingContext(AuraContext, 0);
