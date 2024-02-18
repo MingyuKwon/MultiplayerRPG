@@ -12,6 +12,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature, float,
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChangedSignature, float, NewMana);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChangedSignature, float, NewMaxMana);
 
+
 /**
  * 
  */
@@ -34,6 +35,9 @@ struct FUIWidgetRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture2D* Image = nullptr;
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature, FUIWidgetRow, Row);
+
 
 UCLASS(Blueprintable, BlueprintType)
 class AURA_API UAuraOverlayWidgetController : public UAuraWidgetController
@@ -64,6 +68,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FOnMaxManaChangedSignature OnMaxManaChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "GAS|Message")
+	FMessageWidgetRowSignature MessageWidgetRowDelegate;
 	// End  위젯이 컨트롤러에 등록할 signature
 
 protected:
@@ -83,6 +90,5 @@ protected:
 template<typename T>
 inline T* UAuraOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
 {
-	T* Row = DataTable->FindRow<T>(Tag.GetTagName(), TEXT(""));
-	return Row;
+	return DataTable->FindRow<T>(Tag.GetTagName(), TEXT(""));
 }

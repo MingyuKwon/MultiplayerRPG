@@ -40,10 +40,24 @@ void UAuraOverlayWidgetController::AssetTagBroadCasted(const FGameplayTagContain
 {
 	for (auto tag : GameplayTagContainer)
 	{
-		FString str = FString::Printf(TEXT("%s") , *tag.ToString());
-		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, str);
+		FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName(TEXT("Message")));
+		bool isMessageTag = tag.MatchesTag(MessageTag);
 
-		FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, tag);
+		if (isMessageTag)
+		{
+			FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, tag);
+			if (Row != nullptr)
+			{
+				MessageWidgetRowDelegate.Broadcast(*Row);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("row find failed // TagName :: %s"), tag.GetTagName());
+			}
+			
+		}
+
+		
 	}
 }
 
