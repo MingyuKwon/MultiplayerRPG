@@ -42,6 +42,8 @@ void UAuraOverlayWidgetController::AssetTagBroadCasted(const FGameplayTagContain
 	{
 		FString str = FString::Printf(TEXT("%s") , *tag.ToString());
 		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, str);
+
+		FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, tag);
 	}
 }
 
