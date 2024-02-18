@@ -24,7 +24,7 @@ public:
 	virtual void BroadcastInitialValues() override;
 	virtual void BindCallbacksToDependencies() override;
 
-
+	virtual void AssetTagBroadCasted(const FGameplayTagContainer& GameplayTagContainer);
 	// 지금 흐름을 보면 
 	// 1. 먼저 속성이 변경
 	// 2. controller가 속성이 변경 된 것을 delegate로 받아서 알아차림
