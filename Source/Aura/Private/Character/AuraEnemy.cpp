@@ -10,8 +10,15 @@
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	check(AbilitySystemComponent);
+	InitAbilityActorInfo();
+}
+
+void AAuraEnemy::InitAbilityActorInfo()
+{
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	UAuraAbilitySystemComponentBase* AuraAbilitySystemComponentBase = Cast<UAuraAbilitySystemComponentBase>(AbilitySystemComponent);
+	AuraAbilitySystemComponentBase->AbilityActorInfoSet();
+
 }
 
 AAuraEnemy::AAuraEnemy()

@@ -25,7 +25,7 @@ public:
 	
 	virtual void OnRep_PlayerState() override;
 
-	void InitAbilityActorInfo();
+	virtual void InitAbilityActorInfo() override;
 
 private:
 	UPROPERTY(VisibleAnywhere)
