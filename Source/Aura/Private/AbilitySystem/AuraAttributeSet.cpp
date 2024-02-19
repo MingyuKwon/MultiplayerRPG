@@ -13,10 +13,8 @@ UAuraAttributeSet::UAuraAttributeSet()
 {
 	UE_LOG(LogTemp, Warning, TEXT("UAuraAttributeSet"));
 
-	InitHealth(100.f);
-	InitMana(50.f);
-	InitMaxHealth(200.f);
-	InitMaxMana(100.f);
+	InitHealth(10.f);
+	InitMana(10.f);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
