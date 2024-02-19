@@ -26,4 +26,14 @@ public:
 	virtual void UnHighlightActor() override;
 	// - end - EnemyInterface 
 
+	// - start - Combatnterface 
+	virtual int32 GetPlayerLevel();
+	// - end - Combatnterface 
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character class Defaults")
+	int32 Level = 1;
+
+private:
+	
 };

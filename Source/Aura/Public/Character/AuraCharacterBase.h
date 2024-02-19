@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
+#include "Interaction/CombatInterface.h"
+
 #include "AuraCharacterBase.generated.h"
 
 class UAbilitySystemComponent;
@@ -13,7 +15,7 @@ class UGameplayEffect;
 
 // UCLASS 안에 Abstract 넣게 되면, 이 클래스를 월드 안에 드래그 하는 것이 불가능해진다
 UCLASS(Abstract)
-class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface
+class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 

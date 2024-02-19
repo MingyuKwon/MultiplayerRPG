@@ -27,6 +27,12 @@ public:
 
 	virtual void InitAbilityActorInfo() override;
 
+	// combatinterface start
+	virtual int32 GetPlayerLevel() override;
+
+	// combatinterface end
+
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
