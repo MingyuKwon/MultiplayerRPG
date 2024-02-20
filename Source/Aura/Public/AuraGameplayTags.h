@@ -17,6 +17,8 @@ struct FAuraGamplayTags
 public:
 	static const FAuraGamplayTags& Get() {return GameplayTags;}
 	static void InitializeNativeGameplayTags();
+
+	FGameplayTag Attribute_Secondary_Armor;
 protected:
 
 private:
