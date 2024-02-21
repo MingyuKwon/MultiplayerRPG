@@ -58,7 +58,7 @@ void FAuraGamplayTags::InitializeNativeGameplayTags()
 
 	GameplayTags.Attribute_Secondary_CriticalHitResistance =
 		UGameplayTagsManager::Get().AddNativeGameplayTag(
-			FName("Attributes.Secondary.CriticalHitDamage"),
+			FName("Attributes.Secondary.CriticalHitResistance"),
 			FString("Reduces Critical Hit Chance of attacking enemies"));
 
 	GameplayTags.Attribute_Secondary_HealthRegeneration =
