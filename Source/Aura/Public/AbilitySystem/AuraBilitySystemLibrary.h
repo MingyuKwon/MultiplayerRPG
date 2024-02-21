@@ -10,6 +10,7 @@
  * 
  */
 class UAuraOverlayWidgetController;
+class UAttributeMenuWidgetController;
 
 UCLASS()
 class AURA_API UAuraBilitySystemLibrary : public UBlueprintFunctionLibrary
@@ -19,4 +20,8 @@ class AURA_API UAuraBilitySystemLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|WidgetController")
 	static UAuraOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|WidgetController")
+	static UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
+
 };
