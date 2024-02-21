@@ -17,6 +17,8 @@
  	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
  	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+DECLARE_DELEGATE_RetVal(FGameplayAttribute, FAttributeSignature);
+
 USTRUCT(BlueprintType)
 struct FEffectProperties {
 	GENERATED_BODY()
@@ -51,6 +53,10 @@ struct FEffectProperties {
 	ACharacter* TargetCharacter = nullptr;
 };
 
+// 이거 이제보니까 그냥 함수 포인터이다. 그런데 delegate 가능한 static 함수 포인터에다가 언리얼에서 사용하려니까 어려워 보이는 것
+template<class T>
+using TStaticFuncPtr = typename TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
+
 
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
@@ -66,6 +72,10 @@ public:
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 
 	
+	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
+
+
+
 	//Primary Attribute
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Strength, Category = "Primary Attributes")
 	FGameplayAttributeData Strength;
