@@ -7,6 +7,8 @@
 #include "InputActionValue.h"
 #include "Interaction/EnemyInterface.h"
 #include "Input/AuraInputComponent.h"
+#include "AbilitySystem/AuraAbilitySystemComponentBase.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 
 
@@ -136,16 +138,28 @@ void AAuraPlayerController::CursorTrace()
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag inputTag)
 {
-	UE_LOG(LogTemp, Display, TEXT("Press"));
+	if (GetAuraAbilitySystemComponent() == nullptr) return;
 }
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag inputTag)
 {
-	UE_LOG(LogTemp, Display, TEXT("Release"));
-
+	if (GetAuraAbilitySystemComponent() == nullptr) return;
+	GetAuraAbilitySystemComponent()->AbilityInputTagReleased(inputTag);
 }
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag inputTag)
 {
-	UE_LOG(LogTemp, Display, TEXT("Held"));
+	if (GetAuraAbilitySystemComponent() == nullptr) return;
+	GetAuraAbilitySystemComponent()->AbilityInputTagHeld(inputTag);
+}
+
+UAuraAbilitySystemComponentBase* AAuraPlayerController::GetAuraAbilitySystemComponent()
+{
+	if (AbilitySystemComponent == nullptr)
+	{
+		AbilitySystemComponent = Cast<UAuraAbilitySystemComponentBase>
+			(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn()));
+	}
+
+	return AbilitySystemComponent;
 }
