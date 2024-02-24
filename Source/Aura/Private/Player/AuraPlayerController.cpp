@@ -11,7 +11,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Components/SplineComponent.h"
 #include "AuraGameplayTags.h"
-
+#include "NavigationSystem.h"
+#include "NavigationPath.h"
 
 
 AAuraPlayerController::AAuraPlayerController()
@@ -160,43 +161,83 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag inputTag)
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag inputTag)
 {
-	if (GetAuraAbilitySystemComponent() == nullptr) return;
-	GetAuraAbilitySystemComponent()->AbilityInputTagReleased(inputTag);
-}
-
-void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag inputTag)
-{
-	if (inputTag.MatchesTagExact(FAuraGamplayTags::Get().InputTag_LMB))
+	if (!inputTag.MatchesTagExact(FAuraGamplayTags::Get().InputTag_LMB))
 	{
-		if (bisTargeting)
+		if (GetAuraAbilitySystemComponent())
 		{
-			if (GetAuraAbilitySystemComponent())
-			{
-				GetAuraAbilitySystemComponent()->AbilityInputTagHeld(inputTag);
-			}
+			GetAuraAbilitySystemComponent()->AbilityInputTagReleased(inputTag);
 		}
-		else
+
+		return;
+	}
+
+	if (bisTargeting)
+	{
+		if (GetAuraAbilitySystemComponent())
 		{
-			followTime += GetWorld()->GetDeltaSeconds();
-
-			FHitResult Hit;
-			if (GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, Hit))
-			{
-				CachedDestination = Hit.ImpactPoint;
-			}
-
-			if (APawn* ControlledPawn = GetPawn())
-			{
-				const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
-				ControlledPawn->AddMovementInput(WorldDirection);
-			}
+			GetAuraAbilitySystemComponent()->AbilityInputTagReleased(inputTag);
 		}
 	}
 	else
 	{
+		APawn* ControlledPawn = GetPawn();
+		if (followTime <= ShortPressThreshHold)
+		{
+			if (UNavigationPath* NavPath = 
+				UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
+			{
+				Spline->ClearSplinePoints();
+				for (const FVector& points : NavPath->PathPoints)
+				{
+					Spline->AddSplinePoint(points, ESplineCoordinateSpace::World);
+					DrawDebugSphere(GetWorld(), points, 8.f, 8, FColor::Red , false, 5.f);
+				}
+
+				bAutoRunning = true;
+				
+			}
+			
+		}
+
+		followTime = 0.f;
+		bisTargeting = false;
+	}
+
+}
+
+void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag inputTag)
+{
+	if (!inputTag.MatchesTagExact(FAuraGamplayTags::Get().InputTag_LMB))
+	{
 		if (GetAuraAbilitySystemComponent())
 		{
 			GetAuraAbilitySystemComponent()->AbilityInputTagHeld(inputTag);
+		}
+
+		return;
+	}
+	
+	if (bisTargeting)
+	{
+		if (GetAuraAbilitySystemComponent())
+		{
+			GetAuraAbilitySystemComponent()->AbilityInputTagHeld(inputTag);
+		}
+	}
+	else
+	{
+		followTime += GetWorld()->GetDeltaSeconds();
+
+		FHitResult Hit;
+		if (GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, Hit))
+		{
+			CachedDestination = Hit.ImpactPoint;
+		}
+
+		if (APawn* ControlledPawn = GetPawn())
+		{
+			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
+			ControlledPawn->AddMovementInput(WorldDirection);
 		}
 	}
 	
