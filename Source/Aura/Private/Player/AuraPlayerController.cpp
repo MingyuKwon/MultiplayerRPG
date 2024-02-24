@@ -109,57 +109,17 @@ void AAuraPlayerController::AutoRun()
 
 void AAuraPlayerController::CursorTrace()
 {
-	FHitResult hitResult;
-	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, hitResult);
+	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit);
 
-	if (!hitResult.bBlockingHit) return;
+	if (!CursorHit.bBlockingHit) return;
 
 	LastActor = CurrentActor;
-	CurrentActor = Cast<IEnemyInterface>(hitResult.GetActor());
+	CurrentActor = Cast<IEnemyInterface>(CursorHit.GetActor());
 
-
-	// last와 current 가 둘다 null인 경우 -> 아무것도 안함
-
-	// last가 null,  current 가 null이 아닌 경우 -> current hilight
-
-	// last가 null이 아닌 경우,  current 가 null인 경우 -> unhilight last
-
-	// last와 current 가 둘다 null이 아닌 경우
-	//		last 와 current가 같은 경우 -> 현재 유지
-	
-	//		last 와 current가 다른 경우 -> last unhilight current highlight
-
-	if (LastActor == nullptr)
+	if (LastActor != CurrentActor)
 	{
-		if (CurrentActor == nullptr)
-		{
-			// Do nothing
-		}
-		else
-		{
-			// current highlight
-			CurrentActor->HighlightActor();
-		}
-	}
-	else
-	{
-		if (CurrentActor == nullptr)
-		{
-			// unhighlight last
-			LastActor->UnHighlightActor();
-		}
-		else
-		{
-			if (CurrentActor == LastActor)
-			{
-				CurrentActor->HighlightActor();
-			}
-			else
-			{
-				LastActor->UnHighlightActor();
-				CurrentActor->HighlightActor();
-			}
-		}
+		if (LastActor) LastActor->UnHighlightActor();
+		if (CurrentActor) CurrentActor->HighlightActor();
 	}
 
 }
@@ -186,20 +146,14 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag inputTag)
 {
 	if (!inputTag.MatchesTagExact(FAuraGamplayTags::Get().InputTag_LMB))
 	{
-		if (GetAuraAbilitySystemComponent())
-		{
-			GetAuraAbilitySystemComponent()->AbilityInputTagReleased(inputTag);
-		}
+		if (GetAuraAbilitySystemComponent()) GetAuraAbilitySystemComponent()->AbilityInputTagReleased(inputTag);
 
 		return;
 	}
 
 	if (bisTargeting)
 	{
-		if (GetAuraAbilitySystemComponent())
-		{
-			GetAuraAbilitySystemComponent()->AbilityInputTagReleased(inputTag);
-		}
+		if (GetAuraAbilitySystemComponent()) GetAuraAbilitySystemComponent()->AbilityInputTagReleased(inputTag);
 	}
 	else
 	{
@@ -213,7 +167,6 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag inputTag)
 				for (const FVector& points : NavPath->PathPoints)
 				{
 					Spline->AddSplinePoint(points, ESplineCoordinateSpace::World);
-					DrawDebugSphere(GetWorld(), points, 8.f, 8, FColor::Red , false, 5.f);
 				}
 
 				CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1];
@@ -233,31 +186,21 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag inputTag)
 {
 	if (!inputTag.MatchesTagExact(FAuraGamplayTags::Get().InputTag_LMB))
 	{
-		if (GetAuraAbilitySystemComponent())
-		{
-			GetAuraAbilitySystemComponent()->AbilityInputTagHeld(inputTag);
-		}
-
+		if (GetAuraAbilitySystemComponent()) GetAuraAbilitySystemComponent()->AbilityInputTagHeld(inputTag);
+	
 		return;
 	}
 	
 	if (bisTargeting)
 	{
-		if (GetAuraAbilitySystemComponent())
-		{
-			GetAuraAbilitySystemComponent()->AbilityInputTagHeld(inputTag);
-		}
+		if (GetAuraAbilitySystemComponent()) GetAuraAbilitySystemComponent()->AbilityInputTagHeld(inputTag);
 	}
 	else
 	{
 		followTime += GetWorld()->GetDeltaSeconds();
 
-		FHitResult Hit;
-		if (GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, Hit))
-		{
-			CachedDestination = Hit.ImpactPoint;
-		}
-
+		if (CursorHit.bBlockingHit) CachedDestination = CursorHit.ImpactPoint;
+		
 		if (APawn* ControlledPawn = GetPawn())
 		{
 			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
