@@ -4,9 +4,9 @@
 #include "Player/AuraPlayerController.h"
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
 #include "Interaction/EnemyInterface.h"
+#include "Input/AuraInputComponent.h"
 
 
 
@@ -43,9 +43,13 @@ void AAuraPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+	UAuraInputComponent* auraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
+	auraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	auraInputComponent->BindAbilityActions(InputConfig, this, 
+		&AAuraPlayerController::AbilityInputTagPressed, 
+		&AAuraPlayerController::AbilityInputTagReleased,
+		&AAuraPlayerController::AbilityInputTagHeld);
 
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
 
 }
 
@@ -128,4 +132,20 @@ void AAuraPlayerController::CursorTrace()
 		}
 	}
 
+}
+
+void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag inputTag)
+{
+	UE_LOG(LogTemp, Display, TEXT("Press"));
+}
+
+void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag inputTag)
+{
+	UE_LOG(LogTemp, Display, TEXT("Release"));
+
+}
+
+void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag inputTag)
+{
+	UE_LOG(LogTemp, Display, TEXT("Held"));
 }
