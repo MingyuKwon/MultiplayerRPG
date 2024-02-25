@@ -4,6 +4,8 @@
 #include "AbilitySystem/Ability/AuraProjectileSpell.h"
 #include "Actor/AuraProjectile.h"
 #include "Interaction/CombatInterface.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 
 void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, 
@@ -31,9 +33,8 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
 
-		SpawnTransform.SetRotation(Rotation.Quaternion());
 		// ToDo: Set the Projectile Rotation
-
+		SpawnTransform.SetRotation(Rotation.Quaternion());
 
 		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
 			ProjectileClass,
@@ -43,6 +44,9 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
 		// ToDo: Give the projectile a gameplay Effect Spec for causing Damage
+		UAbilitySystemComponent* SourceASC =  UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+		FGameplayEffectSpecHandle GameplayEffectSpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+		Projectile->DamageEffectSpecHandle = GameplayEffectSpecHandle;
 
 		Projectile->FinishSpawning(SpawnTransform);
 	}

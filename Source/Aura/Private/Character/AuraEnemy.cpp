@@ -19,6 +19,7 @@ void AAuraEnemy::InitAbilityActorInfo()
 	UAuraAbilitySystemComponentBase* AuraAbilitySystemComponentBase = Cast<UAuraAbilitySystemComponentBase>(AbilitySystemComponent);
 	AuraAbilitySystemComponentBase->AbilityActorInfoSet();
 
+	InitializeDefaultAttributes();
 }
 
 AAuraEnemy::AAuraEnemy()
