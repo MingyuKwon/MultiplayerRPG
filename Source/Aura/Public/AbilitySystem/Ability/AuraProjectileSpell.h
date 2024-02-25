@@ -26,6 +26,5 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void SpawnProjectile();
 
-
 private:
 };
