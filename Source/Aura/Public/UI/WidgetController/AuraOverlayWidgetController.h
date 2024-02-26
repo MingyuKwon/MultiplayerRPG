@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DelegateSignatureType.h"
 #include "AbilitySystemComponent.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "AuraOverlayWidgetController.generated.h"

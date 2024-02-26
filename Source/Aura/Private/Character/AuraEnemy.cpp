@@ -2,15 +2,43 @@
 
 
 #include "Character/AuraEnemy.h"
-#include "Aura/Aura.h"
+#include "UI/Widget/AuraUserWidget.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystem/AuraAbilitySystemComponentBase.h"
+#include "Components/WidgetComponent.h"
 
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();
+
+	if (UAuraUserWidget* auraWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		auraWidget->SetWidgetController(this);
+	}
+
+
+	UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
+	if (AuraAttributeSet)
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data) 
+			{
+				OnHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnMaxHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+
+		OnHealthChanged.Broadcast(AuraAttributeSet->GetHealth());
+		OnMaxHealthChanged.Broadcast(AuraAttributeSet->GetMaxHealth());
+	}
 }
 
 void AAuraEnemy::InitAbilityActorInfo()
@@ -32,6 +60,9 @@ AAuraEnemy::AAuraEnemy()
 
 
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(FName(TEXT("AttributeSet")));
+
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	HealthBar->SetupAttachment(GetRootComponent());
 }
 
 void AAuraEnemy::HighlightActor()

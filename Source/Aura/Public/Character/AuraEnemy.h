@@ -3,13 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UI/WidgetController/AuraOverlayWidgetController.h"
 #include "Interaction/EnemyInterface.h"
+#include "Aura/Aura.h"
 #include "Character/AuraCharacterBase.h"
 #include "AuraEnemy.generated.h"
 
+class UWidgetComponent;
 /**
  * 
  */
+
 UCLASS()
 class AURA_API AAuraEnemy : public AAuraCharacterBase, public IEnemyInterface
 {
@@ -18,6 +22,13 @@ class AURA_API AAuraEnemy : public AAuraCharacterBase, public IEnemyInterface
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character class Defaults")
+	int32 Level = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly);
+	TObjectPtr<UWidgetComponent> HealthBar;
+
 public:
 	AAuraEnemy();
 
@@ -30,9 +41,14 @@ public:
 	virtual int32 GetPlayerLevel();
 	// - end - Combatnterface 
 
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangeSignature OnHealthChanged;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character class Defaults")
-	int32 Level = 1;
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangeSignature OnMaxHealthChanged;
+
+
+
 
 private:
 	
