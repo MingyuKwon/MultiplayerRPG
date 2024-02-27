@@ -77,6 +77,11 @@ void AAuraCharacterBase::InitAbilityActorInfo()
 
 }
 
+UAnimMontage* AAuraCharacterBase::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
 void AAuraCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
