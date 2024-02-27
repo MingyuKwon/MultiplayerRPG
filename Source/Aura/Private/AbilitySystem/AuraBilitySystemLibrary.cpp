@@ -8,6 +8,7 @@
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "AuraGameMode.h"
 #include "AbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
 
 UAuraOverlayWidgetController* UAuraBilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
 {
@@ -72,4 +73,17 @@ void UAuraBilitySystemLibrary::InitializeDefaultAttributes(const UObject* WorldC
 	FGameplayEffectSpecHandle vitalhandle = ASC->MakeOutgoingSpec(CharacterClassInfo->VitalAttributes, Level, VitalAttributesContextHandle);
 	ASC->ApplyGameplayEffectSpecToSelf(*vitalhandle.Data.Get());
 
+}
+
+void UAuraBilitySystemLibrary::GiveStartupAbilites(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+{
+	AAuraGameMode* AuraGameMode = Cast<AAuraGameMode>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (AuraGameMode == nullptr) return;
+
+	UCharacterClassInfo* CharacterClassInfo = AuraGameMode->CharacterClassInfo;
+	for (auto AbilityClass : CharacterClassInfo->CommonAbilites)
+	{
+		FGameplayAbilitySpec abilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		ASC->GiveAbility(abilitySpec);
+	}
 }
