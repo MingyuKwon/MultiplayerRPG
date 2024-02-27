@@ -41,6 +41,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	float BaseWalkSpeed = 250.f;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere,Category = "Combat")
+	float LifeSpan = 5.f;
+
 public:
 	AAuraEnemy();
 
@@ -51,6 +54,7 @@ public:
 
 	// - start - Combatnterface 
 	virtual int32 GetPlayerLevel();
+	virtual void Die() override;
 	// - end - Combatnterface 
 
 	UPROPERTY(BlueprintAssignable)
