@@ -13,6 +13,8 @@
 #include "AuraGameplayTags.h"
 #include "NavigationSystem.h"
 #include "NavigationPath.h"
+#include "UI/Widget/DamageTextComponent.h"
+#include "GameFramework/Character.h"
 
 
 AAuraPlayerController::AAuraPlayerController()
@@ -86,6 +88,22 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 	CursorTrace();
 
 	AutoRun();
+}
+
+void AAuraPlayerController::ShowDamageNumber_Implementation(float Damage, ACharacter* TargetCharacter)
+{
+	if (IsValid(TargetCharacter) && DamageTextComponentClass)
+	{
+		UDamageTextComponent* DamageText =  NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
+		DamageText->RegisterComponent();
+		// 여기서 붙이면 Event Construct 에 할당 해 놓은 애니메이션이 재싱이됨
+		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+
+		// 애니메이션 재생 되자마자 바로 때버려서 같이 이동하지 않도록 함
+		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		DamageText->SetDamageText(Damage);
+
+	} 
 }
 
 void AAuraPlayerController::AutoRun()
