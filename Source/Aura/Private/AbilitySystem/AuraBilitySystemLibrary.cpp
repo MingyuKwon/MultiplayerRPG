@@ -48,12 +48,9 @@ UAttributeMenuWidgetController* UAuraBilitySystemLibrary::GetAttributeMenuWidget
 
 void UAuraBilitySystemLibrary::InitializeDefaultAttributes(const UObject* WorldContextObject, ECharacterClass CharacterClass, float Level,UAbilitySystemComponent* ASC)
 {
-	AAuraGameMode* AuraGameMode = Cast<AAuraGameMode>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (AuraGameMode == nullptr) return;
-
 	AActor* AvatarActor = ASC->GetAvatarActor();
 
-	UCharacterClassInfo* CharacterClassInfo = AuraGameMode->CharacterClassInfo;
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 
 	// 이제보니까 FGameplayEffectContextHandle 넘겨누는 것은 ASC에서 인스턴스 하나 만들어서 넘겨주는 것이다
@@ -77,13 +74,20 @@ void UAuraBilitySystemLibrary::InitializeDefaultAttributes(const UObject* WorldC
 
 void UAuraBilitySystemLibrary::GiveStartupAbilites(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
 {
-	AAuraGameMode* AuraGameMode = Cast<AAuraGameMode>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (AuraGameMode == nullptr) return;
-
-	UCharacterClassInfo* CharacterClassInfo = AuraGameMode->CharacterClassInfo;
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	for (auto AbilityClass : CharacterClassInfo->CommonAbilites)
 	{
 		FGameplayAbilitySpec abilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
 		ASC->GiveAbility(abilitySpec);
 	}
+}
+
+UCharacterClassInfo* UAuraBilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
+{
+	AAuraGameMode* AuraGameMode = Cast<AAuraGameMode>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (AuraGameMode == nullptr) return nullptr;
+
+	UCharacterClassInfo* CharacterClassInfo = AuraGameMode->CharacterClassInfo;
+
+	return CharacterClassInfo;
 }

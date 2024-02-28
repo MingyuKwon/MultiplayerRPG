@@ -12,6 +12,7 @@
  */
 class UAuraOverlayWidgetController;
 class UAttributeMenuWidgetController;
+class UCharacterClassInfo;
 
 UCLASS()
 class AURA_API UAuraBilitySystemLibrary : public UBlueprintFunctionLibrary
@@ -30,5 +31,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|CharacterClassDefaults")
 	static void GiveStartupAbilites(const UObject* WorldContextObject, UAbilitySystemComponent* ASC);
+
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|CharacterClassDefaults")
+	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
+
 
 };
