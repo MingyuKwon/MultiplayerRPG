@@ -32,6 +32,12 @@ UAuraAttributeSet::UAuraAttributeSet()
 	TagsToAttributes.Add(GamplayTags.Attribute_Secondary_ManaRegeneration, UAuraAttributeSet::GetManaRegenerationAttribute);
 	TagsToAttributes.Add(GamplayTags.Attribute_Secondary_MaxHealth, UAuraAttributeSet::GetMaxHealthAttribute);
 	TagsToAttributes.Add(GamplayTags.Attribute_Secondary_MaxMana, UAuraAttributeSet::GetMaxManaAttribute);
+
+	TagsToAttributes.Add(GamplayTags.Attribute_Resistance_Fire, UAuraAttributeSet::GetResistance_FireAttribute);
+	TagsToAttributes.Add(GamplayTags.Attribute_Resistance_Lightning, UAuraAttributeSet::GetResistance_LightningAttribute);
+	TagsToAttributes.Add(GamplayTags.Attribute_Resistance_Arcane, UAuraAttributeSet::GetResistance_ArcaneAttribute);
+	TagsToAttributes.Add(GamplayTags.Attribute_Resistance_Physical, UAuraAttributeSet::GetResistance_PhysicalAttribute);
+
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -57,6 +63,11 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Mana, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Fire, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Lightning, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Arcane, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resistance_Physical, COND_None, REPNOTIFY_Always);
 
 }
 
@@ -197,6 +208,27 @@ void UAuraAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana) const
 void UAuraAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, MaxMana, OldMaxMana);
+}
+
+
+void UAuraAttributeSet::OnRep_Resistance_Fire(const FGameplayAttributeData& OldResistance_Fire) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Resistance_Fire, OldResistance_Fire);
+}
+
+void UAuraAttributeSet::OnRep_Resistance_Lightning(const FGameplayAttributeData& OldResistance_Lightning) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Resistance_Lightning, OldResistance_Lightning);
+}
+
+void UAuraAttributeSet::OnRep_Resistance_Arcane(const FGameplayAttributeData& OldResistance_Arcane) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Resistance_Arcane, OldResistance_Arcane);
+}
+
+void UAuraAttributeSet::OnRep_Resistance_Physical(const FGameplayAttributeData& OldResistance_Physical) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Resistance_Physical, OldResistance_Physical);
 }
 
 void UAuraAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrenth) const
