@@ -90,7 +90,7 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 	AutoRun();
 }
 
-void AAuraPlayerController::ShowDamageNumber_Implementation(float Damage, ACharacter* TargetCharacter)
+void AAuraPlayerController::ShowDamageNumber_Implementation(float Damage, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit)
 {
 	if (IsValid(TargetCharacter) && DamageTextComponentClass)
 	{
@@ -101,7 +101,7 @@ void AAuraPlayerController::ShowDamageNumber_Implementation(float Damage, AChara
 
 		// 애니메이션 재생 되자마자 바로 때버려서 같이 이동하지 않도록 함
 		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-		DamageText->SetDamageText(Damage);
+		DamageText->SetDamageText(Damage, bBlockedHit, bCriticalHit);
 
 	} 
 }

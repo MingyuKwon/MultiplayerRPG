@@ -137,6 +137,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	Damage = bCriticalHit ? 2.f * bCriticalHit + SourceCriticalHitDamage : Damage;
 
+	UAuraBilitySystemLibrary::SetIsCriticalHit(EffectContextHandle, bCriticalHit);
 
 	const FGameplayModifierEvaluatedData EvaluateData(UAuraAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluateData);
