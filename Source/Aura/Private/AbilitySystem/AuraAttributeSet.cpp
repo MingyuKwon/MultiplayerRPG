@@ -9,6 +9,7 @@
 #include "Net/UnrealNetwork.h"
 #include "AuraGameplayTags.h"
 #include "Interaction/CombatInterface.h"
+#include "AbilitySystem/AuraBilitySystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/AuraPlayerController.h"
 
@@ -157,12 +158,16 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				}
 			}
 
-			ShowFloatingText(props, LocalImcomingDamage);
+
+			const bool bBlocked = UAuraBilitySystemLibrary::IsBlockedHit(props.EffectContextHandle);
+			const bool bCritical = UAuraBilitySystemLibrary::IsCriticalHit(props.EffectContextHandle);
+
+			ShowFloatingText(props, LocalImcomingDamage, bBlocked, bCritical);
 		}
 	}
 }
 
-void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& props, const float& LocalImcomingDamage)
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& props, const float& LocalImcomingDamage, bool bBlockedHit, bool bCriticalHit)
 {
 	if (props.SourceCharacter != props.TargetCharacter)
 	{
