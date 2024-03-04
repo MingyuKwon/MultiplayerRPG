@@ -69,7 +69,13 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluationParameters.TargetTags = TargetTags;
 
 	// Get Damage Set bu caller magnitute
-	float Damage = Spec.GetSetByCallerMagnitude(FAuraGamplayTags::Get().Damage);
+	float Damage = 0.f;
+	for (FGameplayTag DamageTag : FAuraGamplayTags::Get().DamageTypes)
+	{
+		const float DamageTypeValue = Spec.GetSetByCallerMagnitude(DamageTag);
+
+		Damage += DamageTypeValue;
+	}
 
 	// Caputure BlockCHance on Target, and determine if ther was a successful block
 

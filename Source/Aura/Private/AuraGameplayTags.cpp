@@ -114,11 +114,18 @@ void FAuraGamplayTags::InitializeNativeGameplayTags()
 			FName("InputTag.4"),
 			FString("Input Tag for 4 Button"));
 
+
 	GameplayTags.Damage =
 		UGameplayTagsManager::Get().AddNativeGameplayTag(
 			FName("Damage"),
 			FString("Damage"));
 
+	GameplayTags.Damage_Fire =
+		UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("Damage.Fire"),
+			FString("Fire Damage Type"));
+
+	GameplayTags.DamageTypes.Add(GameplayTags.Damage_Fire);
 
 	GameplayTags.Effects_HitReact =
 		UGameplayTagsManager::Get().AddNativeGameplayTag(
